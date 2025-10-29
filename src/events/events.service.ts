@@ -1,8 +1,25 @@
 import { Injectable } from '@nestjs/common';
+import { CreateEventDto } from '../dto/create-event.dto';
 
 @Injectable()
 export class EventsService {
-  getHello(): string {
-    return 'Hello from EventsService!';
+  getAllEvents(): [] {
+    return [];
+  }
+
+  createEvent(createEventDto: CreateEventDto): string {
+    return `Event ${createEventDto.home_team_id} - ${createEventDto.guest_team_id} created`;
+  }
+
+  getEventById(id: string): string {
+    return `Event with ID: ${id}`;
+  }
+
+  updateEventById(id: string): string {
+    return `Event with ID: ${id} updated`;
+  }
+
+  deleteEventById(id: string): string {
+    return `Event with ID: ${id} deleted`;
   }
 }
