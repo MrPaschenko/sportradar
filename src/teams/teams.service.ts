@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateTeamDto } from '../dto/create-team.dto';
-import { UpdateTeamDto } from '../dto/update-team.dto';
+import { CreateTeamDto } from '../dto/teams/create-team.dto';
+import { UpdateTeamDto } from '../dto/teams/update-team.dto';
 
 @Injectable()
 export class TeamsService {

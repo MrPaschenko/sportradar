@@ -1,4 +1,4 @@
-import { EventStatus } from '../enums/event-status.enum';
+import { EventStatus } from '../../enums/event-status.enum';
 
 export class UpdateEventDto {
   start_time?: Date;

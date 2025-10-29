@@ -8,8 +8,8 @@ import {
   Post,
 } from '@nestjs/common';
 import { VenuesService } from './venues.service';
-import { CreateVenueDto } from '../dto/create-venue.dto';
-import { UpdateVenueDto } from '../dto/update-venue.dto';
+import { CreateVenueDto } from '../dto/venues/create-venue.dto';
+import { UpdateVenueDto } from '../dto/venues/update-venue.dto';
 
 @Controller('venues')
 export class VenuesController {

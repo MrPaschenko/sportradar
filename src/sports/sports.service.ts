@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateSportDto } from '../dto/create-sport.dto';
-import { UpdateSportDto } from '../dto/update-sport.dto';
+import { CreateSportDto } from '../dto/sports/create-sport.dto';
+import { UpdateSportDto } from '../dto/sports/update-sport.dto';
 
 @Injectable()
 export class SportsService {

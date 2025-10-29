@@ -8,8 +8,8 @@ import {
   Post,
 } from '@nestjs/common';
 import { TeamsService } from './teams.service';
-import { CreateTeamDto } from '../dto/create-team.dto';
-import { UpdateTeamDto } from '../dto/update-team.dto';
+import { CreateTeamDto } from '../dto/teams/create-team.dto';
+import { UpdateTeamDto } from '../dto/teams/update-team.dto';
 
 @Controller('teams')
 export class TeamsController {

@@ -1,6 +1,6 @@
 import { Injectable } from '@nestjs/common';
-import { CreateVenueDto } from '../dto/create-venue.dto';
-import { UpdateTeamDto } from '../dto/update-team.dto';
+import { CreateVenueDto } from '../dto/venues/create-venue.dto';
+import { UpdateTeamDto } from '../dto/teams/update-team.dto';
 
 @Injectable()
 export class VenuesService {
