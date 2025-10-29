@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateEventDto } from '../dto/create-event.dto';
+import { UpdateEventDto } from '../dto/update-event.dto';
 
 @Injectable()
 export class EventsService {
@@ -15,8 +16,8 @@ export class EventsService {
     return `Event with ID: ${id}`;
   }
 
-  updateEventById(id: string): string {
-    return `Event with ID: ${id} updated`;
+  updateEventById(id: string, updateEventDto: UpdateEventDto): string {
+    return `Event with ID: ${id} updated:\n${JSON.stringify(updateEventDto)}`;
   }
 
   deleteEventById(id: string): string {

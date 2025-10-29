@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { VenuesService } from './venues.service';
 import { CreateVenueDto } from '../dto/create-venue.dto';
+import { UpdateVenueDto } from '../dto/update-venue.dto';
 
 @Controller('venues')
 export class VenuesController {
@@ -30,8 +31,11 @@ export class VenuesController {
   }
 
   @Put(':id')
-  updateVenueById(@Param() params: { id: string }) {
-    return this.venuesService.updateVenueById(params.id);
+  updateVenueById(
+    @Param() params: { id: string },
+    @Body() updateVenueDto: UpdateVenueDto,
+  ) {
+    return this.venuesService.updateVenueById(params.id, updateVenueDto);
   }
 
   @Delete(':id')

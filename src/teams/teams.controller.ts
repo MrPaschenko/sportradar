@@ -9,6 +9,7 @@ import {
 } from '@nestjs/common';
 import { TeamsService } from './teams.service';
 import { CreateTeamDto } from '../dto/create-team.dto';
+import { UpdateTeamDto } from '../dto/update-team.dto';
 
 @Controller('teams')
 export class TeamsController {
@@ -30,8 +31,11 @@ export class TeamsController {
   }
 
   @Put(':id')
-  updateTeamById(@Param() params: { id: string }) {
-    return this.teamsService.updateTeamById(params.id);
+  updateTeamById(
+    @Param() params: { id: string },
+    @Body() updateTeamDto: UpdateTeamDto,
+  ) {
+    return this.teamsService.updateTeamById(params.id, updateTeamDto);
   }
 
   @Delete(':id')

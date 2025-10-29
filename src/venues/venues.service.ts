@@ -1,5 +1,6 @@
 import { Injectable } from '@nestjs/common';
 import { CreateVenueDto } from '../dto/create-venue.dto';
+import { UpdateTeamDto } from '../dto/update-team.dto';
 
 @Injectable()
 export class VenuesService {
@@ -15,8 +16,8 @@ export class VenuesService {
     return `Venue with ID: ${id}`;
   }
 
-  updateVenueById(id: string): string {
-    return `Venue with ID: ${id} updated`;
+  updateVenueById(id: string, updateTeamDto: UpdateTeamDto): string {
+    return `Venue with ID: ${id} updated:\n${JSON.stringify(updateTeamDto)}`;
   }
 
   deleteVenueById(id: string): string {
