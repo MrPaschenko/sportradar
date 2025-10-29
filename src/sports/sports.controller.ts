@@ -4,8 +4,8 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
-  Put,
 } from '@nestjs/common';
 import { SportsService } from './sports.service';
 import { CreateSportDto } from '../dto/create-sport.dto';
@@ -30,7 +30,7 @@ export class SportsController {
     return this.sportsService.getSportById(params.id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   updateSportById(
     @Param() params: { id: string },
     @Body() updateSportDto: UpdateSportDto,

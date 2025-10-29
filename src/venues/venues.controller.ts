@@ -4,8 +4,8 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
-  Put,
 } from '@nestjs/common';
 import { VenuesService } from './venues.service';
 import { CreateVenueDto } from '../dto/create-venue.dto';
@@ -30,7 +30,7 @@ export class VenuesController {
     return this.venuesService.getVenueById(params.id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   updateVenueById(
     @Param() params: { id: string },
     @Body() updateVenueDto: UpdateVenueDto,

@@ -4,8 +4,8 @@ import {
   Delete,
   Get,
   Param,
+  Patch,
   Post,
-  Put,
 } from '@nestjs/common';
 import { TeamsService } from './teams.service';
 import { CreateTeamDto } from '../dto/create-team.dto';
@@ -30,7 +30,7 @@ export class TeamsController {
     return this.teamsService.getTeamById(params.id);
   }
 
-  @Put(':id')
+  @Patch(':id')
   updateTeamById(
     @Param() params: { id: string },
     @Body() updateTeamDto: UpdateTeamDto,
