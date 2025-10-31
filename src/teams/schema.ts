@@ -1,5 +1,6 @@
 import { pgTable, uuid, text } from 'drizzle-orm/pg-core';
 import { sports } from '../sports/schema';
+import { relations } from 'drizzle-orm';
 
 export const teams = pgTable('teams', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -13,3 +14,10 @@ export const teams = pgTable('teams', {
   websiteUrl: text('website_url'),
   logoUrl: text('logo_url'),
 });
+
+export const teamRelations = relations(teams, ({ one }) => ({
+  sport: one(sports, {
+    fields: [teams.sportId],
+    references: [sports.id],
+  }),
+}));
