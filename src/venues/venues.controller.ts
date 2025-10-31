@@ -16,22 +16,22 @@ export class VenuesController {
   constructor(private readonly venuesService: VenuesService) {}
 
   @Get()
-  getAllVenues() {
+  async getAllVenues() {
     return this.venuesService.getAllVenues();
   }
 
   @Post()
-  createVenue(@Body() createVenueDto: CreateVenueDto) {
+  async createVenue(@Body() createVenueDto: CreateVenueDto) {
     return this.venuesService.createVenue(createVenueDto);
   }
 
   @Get(':id')
-  getVenueById(@Param() params: { id: string }) {
+  async getVenueById(@Param() params: { id: string }) {
     return this.venuesService.getVenueById(params.id);
   }
 
   @Patch(':id')
-  updateVenueById(
+  async updateVenueById(
     @Param() params: { id: string },
     @Body() updateVenueDto: UpdateVenueDto,
   ) {
@@ -39,7 +39,7 @@ export class VenuesController {
   }
 
   @Delete(':id')
-  deleteVenueById(@Param() params: { id: string }) {
+  async deleteVenueById(@Param() params: { id: string }) {
     return this.venuesService.deleteVenueById(params.id);
   }
 }

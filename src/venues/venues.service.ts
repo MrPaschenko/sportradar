@@ -1,26 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateVenueDto } from '../dto/venues/create-venue.dto';
 import { UpdateTeamDto } from '../dto/teams/update-team.dto';
+import { DATABASE_CONNECTION } from '../database/database-connection';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import * as schema from './schema';
+import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class VenuesService {
-  getAllVenues(): string {
-    return 'All venues';
+  constructor(
+    @Inject(DATABASE_CONNECTION)
+    private readonly database: NodePgDatabase<typeof schema>,
+  ) {}
+
+  async getAllVenues() {
+    return this.database.query.venues.findMany();
   }
 
-  createVenue(createVenueDto: CreateVenueDto): string {
+  async createVenue(createVenueDto: CreateVenueDto) {
+    await this.database.insert(schema.venues).values(createVenueDto);
+
     return `Venue ${createVenueDto.name} created`;
   }
 
-  getVenueById(id: string): string {
-    return `Venue with ID: ${id}`;
+  async getVenueById(id: string) {
+    return this.database.query.venues.findFirst({
+      where: eq(schema.venues.id, id),
+    });
   }
 
-  updateVenueById(id: string, updateTeamDto: UpdateTeamDto): string {
+  async updateVenueById(id: string, updateTeamDto: UpdateTeamDto) {
+    await this.database
+      .update(schema.venues)
+      .set(updateTeamDto)
+      .where(eq(schema.venues.id, id));
+
     return `Venue with ID: ${id} updated:\n${JSON.stringify(updateTeamDto)}`;
   }
 
-  deleteVenueById(id: string): string {
+  async deleteVenueById(id: string) {
+    await this.database.delete(schema.venues).where(eq(schema.venues.id, id));
+
     return `Venue with ID: ${id} deleted`;
   }
 }
