@@ -28,6 +28,7 @@ export class TeamsService {
   async getTeamById(id: string) {
     return this.database.query.teams.findFirst({
       where: eq(schema.teams.id, id),
+      with: { sport: true },
     });
   }
 
