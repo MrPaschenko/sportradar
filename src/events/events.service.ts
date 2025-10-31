@@ -38,17 +38,13 @@ export class EventsService {
     await this.database
       .update(schema.events)
       .set(updateEventDto)
-      .where(eq(schema.events.id, id))
-      .returning();
+      .where(eq(schema.events.id, id));
 
     return `Event with ID: ${id} updated`;
   }
 
   async deleteEventById(id: string) {
-    await this.database
-      .delete(schema.events)
-      .where(eq(schema.events.id, id))
-      .returning();
+    await this.database.delete(schema.events).where(eq(schema.events.id, id));
 
     return `Event with ID: ${id} deleted`;
   }
