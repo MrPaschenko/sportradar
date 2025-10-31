@@ -18,10 +18,7 @@ export class SportsService {
   }
 
   async createSport(createSportDto: CreateSportDto) {
-    await this.database.insert(schema.sports).values({
-      name: createSportDto.name,
-      description: createSportDto.description,
-    });
+    await this.database.insert(schema.sports).values(createSportDto);
 
     return `Sport ${createSportDto.name} created`;
   }
