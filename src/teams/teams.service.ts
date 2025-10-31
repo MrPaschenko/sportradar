@@ -1,26 +1,46 @@
-import { Injectable } from '@nestjs/common';
+import { Inject, Injectable } from '@nestjs/common';
 import { CreateTeamDto } from '../dto/teams/create-team.dto';
 import { UpdateTeamDto } from '../dto/teams/update-team.dto';
+import { DATABASE_CONNECTION } from '../database/database-connection';
+import { NodePgDatabase } from 'drizzle-orm/node-postgres';
+import * as schema from './schema';
+import { eq } from 'drizzle-orm';
 
 @Injectable()
 export class TeamsService {
-  getAllTeams(): string {
-    return 'All teams';
+  constructor(
+    @Inject(DATABASE_CONNECTION)
+    private readonly database: NodePgDatabase<typeof schema>,
+  ) {}
+
+  async getAllTeams() {
+    return this.database.query.teams.findMany();
   }
 
-  createTeam(createTeamDto: CreateTeamDto): string {
+  async createTeam(createTeamDto: CreateTeamDto) {
+    await this.database.insert(schema.teams).values(createTeamDto);
+
     return `Team ${createTeamDto.name} created`;
   }
 
-  getTeamById(id: string): string {
-    return `Team with ID: ${id}`;
+  async getTeamById(id: string) {
+    return this.database.query.teams.findFirst({
+      where: eq(schema.teams.id, id),
+    });
   }
 
-  updateTeamById(id: string, updateTeamDto: UpdateTeamDto): string {
+  async updateTeamById(id: string, updateTeamDto: UpdateTeamDto) {
+    await this.database
+      .update(schema.teams)
+      .set(updateTeamDto)
+      .where(eq(schema.teams.id, id));
+
     return `Team with ID: ${id} updated:\n${JSON.stringify(updateTeamDto)}`;
   }
 
-  deleteTeamById(id: string): string {
+  async deleteTeamById(id: string) {
+    await this.database.delete(schema.teams).where(eq(schema.teams.id, id));
+
     return `Team with ID: ${id} deleted`;
   }
 }

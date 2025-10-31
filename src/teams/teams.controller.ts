@@ -16,22 +16,22 @@ export class TeamsController {
   constructor(private readonly teamsService: TeamsService) {}
 
   @Get()
-  getAllTeams() {
+  async getAllTeams() {
     return this.teamsService.getAllTeams();
   }
 
   @Post()
-  createTeam(@Body() createTeamDto: CreateTeamDto) {
+  async createTeam(@Body() createTeamDto: CreateTeamDto) {
     return this.teamsService.createTeam(createTeamDto);
   }
 
   @Get(':id')
-  getTeamById(@Param() params: { id: string }) {
+  async getTeamById(@Param() params: { id: string }) {
     return this.teamsService.getTeamById(params.id);
   }
 
   @Patch(':id')
-  updateTeamById(
+  async updateTeamById(
     @Param() params: { id: string },
     @Body() updateTeamDto: UpdateTeamDto,
   ) {
@@ -39,7 +39,7 @@ export class TeamsController {
   }
 
   @Delete(':id')
-  deleteTeamById(@Param() params: { id: string }) {
+  async deleteTeamById(@Param() params: { id: string }) {
     return this.teamsService.deleteTeamById(params.id);
   }
 }
