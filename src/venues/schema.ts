@@ -1,4 +1,5 @@
 import { pgTable, uuid, text, doublePrecision } from 'drizzle-orm/pg-core';
+import { relations } from 'drizzle-orm';
 
 export const venues = pgTable('venues', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -9,3 +10,7 @@ export const venues = pgTable('venues', {
   longitude: doublePrecision('longitude').notNull(),
   websiteUrl: text('website_url'),
 });
+
+export const VenueRelations = relations(venues, ({ many }) => ({
+  events: many(venues),
+}));

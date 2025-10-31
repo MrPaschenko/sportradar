@@ -9,6 +9,7 @@ import {
 import { sports } from '../sports/schema';
 import { teams } from '../teams/schema';
 import { venues } from '../venues/schema';
+import { relations } from 'drizzle-orm';
 
 export const events = pgTable('events', {
   id: uuid('id').defaultRandom().primaryKey(),
@@ -33,3 +34,22 @@ export const events = pgTable('events', {
   homeScore: integer('home_score').default(0),
   guestScore: integer('guest_score').default(0),
 });
+
+export const eventRelations = relations(events, ({ one }) => ({
+  sport: one(sports, {
+    fields: [events.sportId],
+    references: [sports.id],
+  }),
+  homeTeam: one(teams, {
+    fields: [events.homeTeamId],
+    references: [teams.id],
+  }),
+  guestTeam: one(teams, {
+    fields: [events.guestTeamId],
+    references: [teams.id],
+  }),
+  venue: one(venues, {
+    fields: [events.venueId],
+    references: [venues.id],
+  }),
+}));

@@ -15,9 +15,10 @@ export const teams = pgTable('teams', {
   logoUrl: text('logo_url'),
 });
 
-export const teamRelations = relations(teams, ({ one }) => ({
+export const teamRelations = relations(teams, ({ one, many }) => ({
   sport: one(sports, {
     fields: [teams.sportId],
     references: [sports.id],
   }),
+  events: many(teams),
 }));
