@@ -14,7 +14,9 @@ export class EventsService {
   ) {}
 
   async getAllEvents() {
-    return this.database.query.events.findMany();
+    return this.database.query.events.findMany({
+      with: { sport: true, homeTeam: true, guestTeam: true, venue: true },
+    });
   }
 
   async createEvent(createEventDto: CreateEventDto) {
@@ -30,6 +32,7 @@ export class EventsService {
   async getEventById(id: string) {
     return this.database.query.events.findFirst({
       where: eq(schema.events.id, id),
+      with: { sport: true, homeTeam: true, guestTeam: true, venue: true },
     });
   }
 
