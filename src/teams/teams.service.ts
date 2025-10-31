@@ -14,7 +14,9 @@ export class TeamsService {
   ) {}
 
   async getAllTeams() {
-    return this.database.query.teams.findMany();
+    return this.database.query.teams.findMany({
+      with: { sport: true },
+    });
   }
 
   async createTeam(createTeamDto: CreateTeamDto) {
