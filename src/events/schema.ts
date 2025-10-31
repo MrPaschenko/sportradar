@@ -3,7 +3,8 @@ import {
   uuid,
   integer,
   smallint,
-  timestamp,
+  time,
+  date,
 } from 'drizzle-orm/pg-core';
 import { sports } from '../sports/schema';
 import { teams } from '../teams/schema';
@@ -11,10 +12,10 @@ import { venues } from '../venues/schema';
 
 export const events = pgTable('events', {
   id: uuid('id').defaultRandom().primaryKey(),
-  startTime: timestamp('start_time', {
-    withTimezone: true,
-    mode: 'date',
+  startTime: time('start_time', {
+    withTimezone: false,
   }).notNull(),
+  startDate: date('start_date').notNull(),
   sportId: uuid('sport_id')
     .notNull()
     .references(() => sports.id),

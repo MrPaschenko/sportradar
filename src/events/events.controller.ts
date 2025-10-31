@@ -16,22 +16,22 @@ export class EventsController {
   constructor(private readonly eventsService: EventsService) {}
 
   @Get()
-  getAllEvents(): [] {
+  async getAllEvents() {
     return this.eventsService.getAllEvents();
   }
 
   @Post()
-  createEvent(@Body() createEventDto: CreateEventDto) {
+  async createEvent(@Body() createEventDto: CreateEventDto) {
     return this.eventsService.createEvent(createEventDto);
   }
 
   @Get(':id')
-  getEventById(@Param() params: { id: string }) {
+  async getEventById(@Param() params: { id: string }) {
     return this.eventsService.getEventById(params.id);
   }
 
   @Patch(':id')
-  updateEventById(
+  async updateEventById(
     @Param() params: { id: string },
     @Body() updateEventDto: UpdateEventDto,
   ) {
@@ -39,7 +39,7 @@ export class EventsController {
   }
 
   @Delete(':id')
-  deleteEventById(@Param() params: { id: string }) {
+  async deleteEventById(@Param() params: { id: string }) {
     return this.eventsService.deleteEventById(params.id);
   }
 }

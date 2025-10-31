@@ -1,7 +1,8 @@
 import { EventStatus } from '../../enums/event-status.enum';
 
 export class CreateEventDto {
-  startTime: Date;
+  startTime: string;
+  startDate: string;
   sportId: string;
   homeTeamId: string;
   guestTeamId: string;
