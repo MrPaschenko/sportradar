@@ -16,22 +16,22 @@ export class SportsController {
   constructor(private readonly sportsService: SportsService) {}
 
   @Get()
-  getAllSports() {
+  async getAllSports() {
     return this.sportsService.getAllSports();
   }
 
   @Post()
-  createSport(@Body() createSportDto: CreateSportDto) {
+  async createSport(@Body() createSportDto: CreateSportDto) {
     return this.sportsService.createSport(createSportDto);
   }
 
   @Get(':id')
-  getSportById(@Param() params: { id: string }) {
+  async getSportById(@Param() params: { id: string }) {
     return this.sportsService.getSportById(params.id);
   }
 
   @Patch(':id')
-  updateSportById(
+  async updateSportById(
     @Param() params: { id: string },
     @Body() updateSportDto: UpdateSportDto,
   ) {
@@ -39,7 +39,7 @@ export class SportsController {
   }
 
   @Delete(':id')
-  deleteSportById(@Param() params: { id: string }) {
+  async deleteSportById(@Param() params: { id: string }) {
     return this.sportsService.deleteSportById(params.id);
   }
 }
