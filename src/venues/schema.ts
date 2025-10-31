@@ -11,6 +11,6 @@ export const venues = pgTable('venues', {
   websiteUrl: text('website_url'),
 });
 
-export const VenueRelations = relations(venues, ({ many }) => ({
+export const venueRelations = relations(venues, ({ many }) => ({
   events: many(venues),
 }));
