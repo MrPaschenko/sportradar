@@ -18,7 +18,6 @@ export class EventsService {
   }
 
   async createEvent(createEventDto: CreateEventDto) {
-    console.log('Creating event with data:', createEventDto);
     try {
       await this.database.insert(schema.events).values(createEventDto);
     } catch (error) {
