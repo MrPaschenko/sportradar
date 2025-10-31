@@ -5,5 +5,5 @@ export class UpdateVenueDto {
   country?: string;
   longitude?: number;
   latitude?: number;
-  website_url?: string;
+  websiteUrl?: string;
 }
