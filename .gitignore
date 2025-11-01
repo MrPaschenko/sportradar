@@ -3,6 +3,9 @@
 /node_modules
 /build
 
+# drizzle ORM generated files
+/drizzle
+
 # Logs
 logs
 *.log
