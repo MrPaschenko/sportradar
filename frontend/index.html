@@ -1,0 +1,341 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Events CRUD</title>
+  <style>
+      :root { font-family: system-ui, -apple-system, Segoe UI, Roboto, Arial, sans-serif; }
+      body { margin: 24px; }
+      h1 { margin: 0 0 12px; font-size: 20px; }
+      .row { display: flex; gap: 12px; flex-wrap: wrap; align-items: center; }
+      .card { border: 1px solid #ddd; border-radius: 10px; padding: 16px; margin-bottom: 16px; box-shadow: 0 1px 2px rgba(0,0,0,0.06); }
+      label { display: block; font-size: 12px; color: #444; margin-bottom: 4px; }
+      input, select, textarea { padding: 8px; border: 1px solid #ccc; border-radius: 8px; min-width: 160px; }
+      input[type="number"] { width: 100px; }
+      button { padding: 8px 12px; border: 1px solid #ccc; background: #fff; border-radius: 8px; cursor: pointer; }
+      button.primary { background: #0ea5e9; border-color: #0ea5e9; color: #fff; }
+      button.warn { background: #ef4444; border-color: #ef4444; color: #fff; }
+      table { width: 100%; border-collapse: collapse; }
+      th, td { text-align: left; padding: 8px; border-bottom: 1px solid #eee; vertical-align: top; }
+      .muted { color: #666; font-size: 12px; }
+      .pill { display: inline-flex; align-items: center; gap: 6px; border: 1px solid #ddd; padding: 2px 8px; border-radius: 999px; font-size: 12px; }
+      .right { margin-left: auto; }
+      .error { color: #b91c1c; }
+      .success { color: #166534; }
+      .msg { font-size: 13px; margin-left: 8px; }
+      .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
+      .wide { grid-column: 1 / -1; }
+      .sr { position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px,1px,1px,1px); white-space: nowrap; }
+  </style>
+</head>
+<body>
+<h1>Events CRUD</h1>
+
+<div class="card row">
+  <div>
+    <button id="refreshBtn">Refresh</button>
+    <span class="muted">GET /events/</span>
+  </div>
+  <div class="right">
+    <span id="statusMsg" class="msg"></span>
+  </div>
+</div>
+
+<div class="card">
+  <h2 style="font-size:16px; margin:0 0 8px;">Create or Update</h2>
+  <p class="muted" style="margin:0 0 12px;">Submit without an ID to create (POST /events/). Submit with an existing ID to update (PUT /events/{id}).</p>
+  <form id="eventForm" class="grid">
+    <div>
+      <label for="id">ID (optional for create)</label>
+      <input id="id" name="id" placeholder="uuid..." />
+    </div>
+    <div>
+      <label for="startDate">Start Date</label>
+      <input id="startDate" name="startDate" type="date" required />
+    </div>
+    <div>
+      <label for="startTime">Start Time</label>
+      <input id="startTime" name="startTime" type="time" step="1" required />
+    </div>
+    <div>
+      <label for="sportId">Sport ID</label>
+      <input id="sportId" name="sportId" required />
+    </div>
+    <div>
+      <label for="homeTeamId">Home Team ID</label>
+      <input id="homeTeamId" name="homeTeamId" required />
+    </div>
+    <div>
+      <label for="guestTeamId">Guest Team ID</label>
+      <input id="guestTeamId" name="guestTeamId" required />
+    </div>
+    <div>
+      <label for="venueId">Venue ID</label>
+      <input id="venueId" name="venueId" required />
+    </div>
+    <div>
+      <label for="status">Status</label>
+      <input id="status" name="status" type="number" step="1" min="0" required />
+    </div>
+    <div>
+      <label for="homeScore">Home Score</label>
+      <input id="homeScore" name="homeScore" type="number" step="1" min="0" value="0" />
+    </div>
+    <div>
+      <label for="guestScore">Guest Score</label>
+      <input id="guestScore" name="guestScore" type="number" step="1" min="0" value="0" />
+    </div>
+    <div class="wide">
+      <label for="extraJson">Extra fields JSON (optional)</label>
+      <textarea id="extraJson" name="extraJson" rows="4" placeholder='{"sport": {...}, "homeTeam": {...}, "guestTeam": {...}, "venue": {...}}'></textarea>
+    </div>
+
+    <div class="row wide">
+      <button type="submit" class="primary" id="saveBtn">Save</button>
+      <button type="button" id="resetBtn">Reset</button>
+      <span id="formMsg" class="msg"></span>
+    </div>
+  </form>
+</div>
+
+<div class="card">
+  <div class="row">
+    <h2 style="font-size:16px; margin:0;">Events</h2>
+    <div class="right">
+      <label class="sr" for="search">Search</label>
+      <input id="search" placeholder="Filter by team, sport, venue or id" />
+    </div>
+  </div>
+  <div style="overflow:auto;">
+    <table id="eventsTable" aria-live="polite">
+      <thead>
+      <tr>
+        <th>ID</th>
+        <th>Date</th>
+        <th>Time</th>
+        <th>Sport</th>
+        <th>Home</th>
+        <th>Guest</th>
+        <th>Venue</th>
+        <th>Status</th>
+        <th>Score</th>
+        <th>Actions</th>
+      </tr>
+      </thead>
+      <tbody>
+      <tr><td colspan="10" class="muted">No data</td></tr>
+      </tbody>
+    </table>
+  </div>
+</div>
+
+<template id="rowTmpl">
+  <tr>
+    <td class="id"></td>
+    <td class="date"></td>
+    <td class="time"></td>
+    <td class="sport"></td>
+    <td class="home"></td>
+    <td class="guest"></td>
+    <td class="venue"></td>
+    <td class="status"></td>
+    <td class="score"></td>
+    <td>
+      <div class="row">
+        <button data-action="edit">Edit</button>
+        <button data-action="delete" class="warn">Delete</button>
+      </div>
+    </td>
+  </tr>
+</template>
+
+<script>
+  const apiBase = 'http://localhost:8000/events/'; // ensure CORS is enabled on the API
+
+  const $ = sel => document.querySelector(sel);
+  const $$ = sel => Array.from(document.querySelectorAll(sel));
+
+  const state = { events: [], filtered: [] };
+
+  function setStatus(text, type='') {
+    const el = $('#statusMsg');
+    el.textContent = text || '';
+    el.className = `msg ${type}`;
+  }
+
+  function setFormMsg(text, type='') {
+    const el = $('#formMsg');
+    el.textContent = text || '';
+    el.className = `msg ${type}`;
+  }
+
+  async function fetchEvents() {
+    setStatus('Loading...');
+    try {
+      const res = await fetch(apiBase, { headers: { 'Accept': 'application/json' } });
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      const data = await res.json();
+      if (!Array.isArray(data)) throw new Error('Expected an array');
+      state.events = data;
+      state.filtered = data;
+      renderTable(state.filtered);
+      setStatus(`Loaded ${data.length} event(s).`, 'success');
+    } catch (err) {
+      console.error(err);
+      renderTable([]);
+      setStatus('Failed to load events: ' + err.message, 'error');
+    }
+  }
+
+  function renderTable(list) {
+    const tbody = $('#eventsTable tbody');
+    tbody.innerHTML = '';
+    if (!list.length) {
+      const tr = document.createElement('tr');
+      const td = document.createElement('td');
+      td.colSpan = 10; td.textContent = 'No data'; td.className = 'muted';
+      tr.appendChild(td); tbody.appendChild(tr); return;
+    }
+    const tmpl = $('#rowTmpl');
+    list.forEach(ev => {
+      const node = tmpl.content.cloneNode(true);
+      node.querySelector('.id').textContent = ev.id || '';
+      node.querySelector('.date').textContent = ev.startDate || '';
+      node.querySelector('.time').textContent = ev.startTime || '';
+      node.querySelector('.sport').textContent = ev.sport?.name || ev.sportId || '';
+      node.querySelector('.home').textContent = ev.homeTeam?.shortName || ev.homeTeam?.name || ev.homeTeamId || '';
+      node.querySelector('.guest').textContent = ev.guestTeam?.shortName || ev.guestTeam?.name || ev.guestTeamId || '';
+      node.querySelector('.venue').textContent = ev.venue?.name || ev.venueId || '';
+      node.querySelector('.status').textContent = String(ev.status ?? '');
+      node.querySelector('.score').textContent = `${ev.homeScore ?? ''}:${ev.guestScore ?? ''}`;
+      const row = node.querySelector('tr');
+      row.dataset.id = ev.id;
+      tbody.appendChild(node);
+    });
+  }
+
+  function fillForm(ev) {
+    $('#id').value = ev.id || '';
+    $('#startDate').value = ev.startDate || '';
+    $('#startTime').value = ev.startTime || '';
+    $('#sportId').value = ev.sportId || '';
+    $('#homeTeamId').value = ev.homeTeamId || '';
+    $('#guestTeamId').value = ev.guestTeamId || '';
+    $('#venueId').value = ev.venueId || '';
+    $('#status').value = ev.status ?? '';
+    $('#homeScore').value = ev.homeScore ?? 0;
+    $('#guestScore').value = ev.guestScore ?? 0;
+    const extras = {};
+    if (ev.sport) extras.sport = ev.sport;
+    if (ev.homeTeam) extras.homeTeam = ev.homeTeam;
+    if (ev.guestTeam) extras.guestTeam = ev.guestTeam;
+    if (ev.venue) extras.venue = ev.venue;
+    $('#extraJson').value = Object.keys(extras).length ? JSON.stringify(extras, null, 2) : '';
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  }
+
+  function readForm() {
+    const base = {
+      startDate: $('#startDate').value.trim(),
+      startTime: $('#startTime').value.trim(),
+      sportId: $('#sportId').value.trim(),
+      homeTeamId: $('#homeTeamId').value.trim(),
+      guestTeamId: $('#guestTeamId').value.trim(),
+      venueId: $('#venueId').value.trim(),
+      status: Number($('#status').value),
+      homeScore: Number($('#homeScore').value || 0),
+      guestScore: Number($('#guestScore').value || 0),
+    };
+    const id = $('#id').value.trim();
+    let extra = {};
+    const extraText = $('#extraJson').value.trim();
+    if (extraText) {
+      try { extra = JSON.parse(extraText); }
+      catch { throw new Error('Extra fields JSON is invalid'); }
+    }
+    return id ? { id, ...base, ...extra } : { ...base, ...extra };
+  }
+
+  async function saveEvent(e) {
+    e.preventDefault();
+    setFormMsg('Saving...');
+    try {
+      const payload = readForm();
+      const hasId = !!payload.id;
+      const url = hasId ? apiBase + encodeURIComponent(payload.id) : apiBase;
+      const method = hasId ? 'PATCH' : 'POST';
+      const res = await fetch(url, {
+        method,
+        headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
+        body: JSON.stringify(payload),
+      });
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      setFormMsg(hasId ? 'Updated successfully.' : 'Created successfully.', 'success');
+      await fetchEvents();
+      if (!hasId) $('#eventForm').reset();
+    } catch (err) {
+      console.error(err);
+      setFormMsg('Save failed: ' + err.message, 'error');
+    }
+  }
+
+  async function deleteEvent(id) {
+    if (!id) return;
+    if (!confirm('Delete this event?')) return;
+    setStatus('Deleting...');
+    try {
+      const res = await fetch(apiBase + encodeURIComponent(id), { method: 'DELETE' });
+      if (!res.ok) throw new Error(`${res.status} ${res.statusText}`);
+      setStatus('Deleted.', 'success');
+      await fetchEvents();
+    } catch (err) {
+      console.error(err);
+      setStatus('Delete failed: ' + err.message, 'error');
+    }
+  }
+
+  function resetForm() {
+    $('#eventForm').reset();
+    setFormMsg('');
+  }
+
+  function setupEvents() {
+    $('#refreshBtn').addEventListener('click', fetchEvents);
+    $('#eventForm').addEventListener('submit', saveEvent);
+    $('#resetBtn').addEventListener('click', resetForm);
+
+    $('#eventsTable').addEventListener('click', e => {
+      const btn = e.target.closest('button');
+      if (!btn) return;
+      const tr = e.target.closest('tr');
+      const id = tr?.dataset.id;
+      if (btn.dataset.action === 'edit') {
+        const ev = state.events.find(x => x.id === id);
+        if (ev) fillForm(ev);
+      } else if (btn.dataset.action === 'delete') {
+        deleteEvent(id);
+      }
+    });
+
+    $('#search').addEventListener('input', e => {
+      const q = e.target.value.toLowerCase();
+      state.filtered = state.events.filter(ev => {
+        const parts = [
+          ev.id, ev.startDate, ev.startTime, ev.sportId, ev.venueId,
+          ev.homeTeamId, ev.guestTeamId,
+          ev.sport?.name, ev.homeTeam?.name, ev.homeTeam?.shortName,
+          ev.guestTeam?.name, ev.guestTeam?.shortName, ev.venue?.name,
+        ].filter(Boolean).map(String).map(s => s.toLowerCase());
+        return parts.some(p => p.includes(q));
+      });
+      renderTable(state.filtered);
+    });
+  }
+
+  // Init
+  setupEvents();
+  fetchEvents();
+</script>
+</body>
+</html>
