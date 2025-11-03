@@ -1,9 +1,4 @@
-export class UpdateVenueDto {
-  name?: string;
-  capacity?: number;
-  city?: string;
-  country?: string;
-  longitude?: number;
-  latitude?: number;
-  websiteUrl?: string;
-}
+import { PartialType } from '@nestjs/swagger';
+import { CreateVenueDto } from './create-venue.dto';
+
+export class UpdateVenueDto extends PartialType(CreateVenueDto) {}

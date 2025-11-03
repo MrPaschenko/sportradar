@@ -1,9 +1,4 @@
-export class UpdateTeamDto {
-  name?: string;
-  shortName?: string;
-  city?: string;
-  country?: string;
-  sportId?: string;
-  websiteUrl?: string;
-  logoUrl?: string;
-}
+import { PartialType } from '@nestjs/swagger';
+import { CreateTeamDto } from './create-team.dto';
+
+export class UpdateTeamDto extends PartialType(CreateTeamDto) {}

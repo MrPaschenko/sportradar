@@ -1,13 +1,4 @@
-import { EventStatus } from '../../enums/event-status.enum';
+import { PartialType } from '@nestjs/swagger';
+import { CreateEventDto } from './create-event.dto';
 
-export class UpdateEventDto {
-  startTime?: string;
-  startDate?: string;
-  sportId?: string;
-  homeTeamId?: string;
-  guestTeamId?: string;
-  venueId?: string;
-  status?: EventStatus;
-  homeScore?: number;
-  guestScore?: number;
-}
+export class UpdateEventDto extends PartialType(CreateEventDto) {}

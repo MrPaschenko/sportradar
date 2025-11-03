@@ -1,4 +1,4 @@
-export class UpdateSportDto {
-  name?: string;
-  description?: string;
-}
+import { PartialType } from '@nestjs/swagger';
+import { CreateSportDto } from './create-sport.dto';
+
+export class UpdateSportDto extends PartialType(CreateSportDto) {}
