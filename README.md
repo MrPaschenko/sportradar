@@ -4,25 +4,25 @@
 
 > **Note**: This project uses Docker for containerization. To get Docker, visit [Docker Documentation](https://docs.docker.com/get-started/get-docker/).
 
-1. Clone this repository
+1. Clone this repository.
 
 ```bash
 git clone https://github.com/MrPaschenko/sportradar
 ```
 
-2. Navigate to the `sportradar` directory
+2. Navigate to the `sportradar` directory.
 
 ```bash
 cd sportradar
 ```
 
-3. Copy `.env.example` to `.env` and adjust environment variables if needed
+3. Copy `.env.example` to `.env`.
 
 ```bash
 cp ./backend/.env.example ./backend/.env
 ```
 
-4. Build and start the Docker containers
+4. Build and start the Docker containers.
 
 ```bash
 docker-compose up --build
