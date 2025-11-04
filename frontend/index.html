@@ -27,127 +27,168 @@
       .grid { display: grid; grid-template-columns: repeat(auto-fit, minmax(180px, 1fr)); gap: 12px; }
       .wide { grid-column: 1 / -1; }
       .sr { position: absolute; height: 1px; width: 1px; overflow: hidden; clip: rect(1px,1px,1px,1px); white-space: nowrap; }
+      .nav { position: sticky; top: 0; background: #fff; padding: 12px 16px; border: 1px solid #ddd; border-radius: 10px; margin-bottom: 16px; z-index: 10; }
+      .nav .logo { font-weight: 600; }
+      .menu { list-style: none; display: flex; gap: 8px; margin: 0; padding: 0; }
+      .menu a { display: inline-block; padding: 6px 10px; border: 1px solid #ddd; border-radius: 999px; text-decoration: none; color: inherit; }
+      .menu a.active { background: #0ea5e9; border-color: #0ea5e9; color: #fff; }
+      .section { display: none; }
+      .section.active { display: block; }
   </style>
 </head>
 <body>
-<h1>Events CRUD</h1>
 
-<div class="card row">
-  <div>
-    <button id="refreshBtn">Refresh</button>
-    <span class="muted">GET /events/</span>
-  </div>
-  <div class="right">
-    <span id="statusMsg" class="msg"></span>
-  </div>
-</div>
+<nav class="nav row">
+  <div class="logo">Sportradar</div>
+  <ul class="menu right">
+    <li><a href="#" data-section="events" class="active">Events</a></li>
+    <li><a href="#" data-section="sports">Sports</a></li>
+    <li><a href="#" data-section="teams">Teams</a></li>
+    <li><a href="#" data-section="venues">Venues</a></li>
+  </ul>
+</nav>
 
-<div class="card">
-  <h2 style="font-size:16px; margin:0 0 8px;">Create or Update</h2>
-  <p class="muted" style="margin:0 0 12px;">Submit without an ID to create (POST /events/). Submit with an existing ID to update (PATCH /events/{id}).</p>
-  <form id="eventForm" class="grid">
-    <div>
-      <label for="id">ID (optional for create)</label>
-      <input id="id" name="id" placeholder="uuid..." />
-    </div>
-    <div>
-      <label for="startDate">Start Date</label>
-      <input id="startDate" name="startDate" type="date" required />
-    </div>
-    <div>
-      <label for="startTime">Start Time</label>
-      <input id="startTime" name="startTime" type="time" step="1" required />
-    </div>
-    <div>
-      <label for="sportId">Sport ID</label>
-      <input id="sportId" name="sportId" required />
-    </div>
-    <div>
-      <label for="homeTeamId">Home Team ID</label>
-      <input id="homeTeamId" name="homeTeamId" required />
-    </div>
-    <div>
-      <label for="guestTeamId">Guest Team ID</label>
-      <input id="guestTeamId" name="guestTeamId" required />
-    </div>
-    <div>
-      <label for="venueId">Venue ID</label>
-      <input id="venueId" name="venueId" required />
-    </div>
-    <div>
-      <label for="status">Status</label>
-      <input id="status" name="status" type="number" step="1" min="0" required />
-    </div>
-    <div>
-      <label for="homeScore">Home Team Score</label>
-      <input id="homeScore" name="homeScore" type="number" step="1" min="0" value="0" />
-    </div>
-    <div>
-      <label for="guestScore">Guest Team Score</label>
-      <input id="guestScore" name="guestScore" type="number" step="1" min="0" value="0" />
-    </div>
+<section id="section-events" class="section active">
+  <h1>Events CRUD</h1>
 
-    <div class="row wide">
-      <button type="submit" class="primary" id="saveBtn">Save</button>
-      <button type="button" id="resetBtn">Reset</button>
-      <span id="formMsg" class="msg"></span>
+  <div class="card row">
+    <div>
+      <button id="refreshBtn">Refresh</button>
+      <span class="muted">GET /events/</span>
     </div>
-  </form>
-</div>
-
-<div class="card">
-  <div class="row">
-    <h2 style="font-size:16px; margin:0;">Events</h2>
     <div class="right">
-      <label class="sr" for="search">Search</label>
-      <input id="search" style="width: 190px" placeholder="Filter by team, sport, venue or id" />
+      <span id="statusMsg" class="msg"></span>
     </div>
   </div>
-  <div style="overflow:auto;">
-    <table id="eventsTable" aria-live="polite">
-      <thead>
-      <tr>
-        <th>ID</th>
-        <th>Date</th>
-        <th>Time</th>
-        <th>Sport</th>
-        <th>Home Team</th>
-        <th>Guest Team</th>
-        <th>Venue</th>
-        <th>Status</th>
-        <th>Score</th>
-        <th>Actions</th>
-      </tr>
-      </thead>
-      <tbody>
-      <tr><td colspan="10" class="muted">No data</td></tr>
-      </tbody>
-    </table>
-  </div>
-</div>
 
-<template id="rowTmpl">
-  <tr>
-    <td class="id"></td>
-    <td class="date"></td>
-    <td class="time"></td>
-    <td class="sport"></td>
-    <td class="home"></td>
-    <td class="guest"></td>
-    <td class="venue"></td>
-    <td class="status"></td>
-    <td class="score"></td>
-    <td>
-      <div class="row">
-        <button data-action="edit">Edit</button>
-        <button data-action="delete" class="warn">Delete</button>
+  <div class="card">
+    <h2 style="font-size:16px; margin:0 0 8px;">Create or Update</h2>
+    <p class="muted" style="margin:0 0 12px;">Submit without an ID to create (POST /events/). Submit with an existing ID to update (PATCH /events/{id}).</p>
+    <form id="eventForm" class="grid">
+      <div>
+        <label for="id">ID (optional for create)</label>
+        <input id="id" name="id" placeholder="uuid..." />
       </div>
-    </td>
-  </tr>
-</template>
+      <div>
+        <label for="startDate">Start Date</label>
+        <input id="startDate" name="startDate" type="date" required />
+      </div>
+      <div>
+        <label for="startTime">Start Time</label>
+        <input id="startTime" name="startTime" type="time" step="1" required />
+      </div>
+      <div>
+        <label for="sportId">Sport ID</label>
+        <input id="sportId" name="sportId" required />
+      </div>
+      <div>
+        <label for="homeTeamId">Home Team ID</label>
+        <input id="homeTeamId" name="homeTeamId" required />
+      </div>
+      <div>
+        <label for="guestTeamId">Guest Team ID</label>
+        <input id="guestTeamId" name="guestTeamId" required />
+      </div>
+      <div>
+        <label for="venueId">Venue ID</label>
+        <input id="venueId" name="venueId" required />
+      </div>
+      <div>
+        <label for="status">Status</label>
+        <input id="status" name="status" type="number" step="1" min="0" required />
+      </div>
+      <div>
+        <label for="homeScore">Home Team Score</label>
+        <input id="homeScore" name="homeScore" type="number" step="1" min="0" value="0" />
+      </div>
+      <div>
+        <label for="guestScore">Guest Team Score</label>
+        <input id="guestScore" name="guestScore" type="number" step="1" min="0" value="0" />
+      </div>
+
+      <div class="row wide">
+        <button type="submit" class="primary" id="saveBtn">Save</button>
+        <button type="button" id="resetBtn">Reset</button>
+        <span id="formMsg" class="msg"></span>
+      </div>
+    </form>
+  </div>
+
+  <div class="card">
+    <div class="row">
+      <h2 style="font-size:16px; margin:0;">Events</h2>
+      <div class="right">
+        <label class="sr" for="search">Search</label>
+        <input id="search" style="width: 190px" placeholder="Filter by team, sport, venue or id" />
+      </div>
+    </div>
+    <div style="overflow:auto;">
+      <table id="eventsTable" aria-live="polite">
+        <thead>
+        <tr>
+          <th>ID</th>
+          <th>Date</th>
+          <th>Time</th>
+          <th>Sport</th>
+          <th>Home Team</th>
+          <th>Guest Team</th>
+          <th>Venue</th>
+          <th>Status</th>
+          <th>Score</th>
+          <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr><td colspan="10" class="muted">No data</td></tr>
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <template id="rowTmpl">
+    <tr>
+      <td class="id"></td>
+      <td class="date"></td>
+      <td class="time"></td>
+      <td class="sport"></td>
+      <td class="home"></td>
+      <td class="guest"></td>
+      <td class="venue"></td>
+      <td class="status"></td>
+      <td class="score"></td>
+      <td>
+        <div class="row">
+          <button data-action="edit">Edit</button>
+          <button data-action="delete" class="warn">Delete</button>
+        </div>
+      </td>
+    </tr>
+  </template>
+</section>
+
+<section id="section-sports" class="section">
+  <h1>Sports</h1>
+  <div class="card">
+    <p class="muted" style="margin:0;">TBD...</p>
+  </div>
+</section>
+
+<section id="section-teams" class="section">
+  <h1>Teams</h1>
+  <div class="card">
+    <p class="muted" style="margin:0;">TBD...</p>
+  </div>
+</section>
+
+<section id="section-venues" class="section">
+  <h1>Venues</h1>
+  <div class="card">
+    <p class="muted" style="margin:0;">TBD...</p>
+  </div>
+</section>
 
 <script>
-  const apiBase = 'http://localhost:8000/events/'; // ensure CORS is enabled on the API
+  const apiBase = 'http://localhost:8000/events/';
 
   const $ = sel => document.querySelector(sel);
   const $$ = sel => Array.from(document.querySelectorAll(sel));
@@ -317,8 +358,22 @@
     });
   }
 
-  // Init
+  function setupNav() {
+    const links = $$('.menu a');
+    const activate = key => {
+      links.forEach(a => a.classList.toggle('active', a.dataset.section === key));
+      $$('.section').forEach(sec => sec.classList.toggle('active', sec.id === `section-${key}`));
+    };
+    links.forEach(a => {
+      a.addEventListener('click', e => {
+        e.preventDefault();
+        activate(a.dataset.section);
+      });
+    });
+  }
+
   setupEvents();
+  setupNav();
   fetchEvents();
 </script>
 </body>
