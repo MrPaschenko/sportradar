@@ -16,13 +16,19 @@ git clone https://github.com/MrPaschenko/sportradar
 cd sportradar
 ```
 
-3. Build and start the Docker containers
+3. Copy `.env.example` to `.env` and adjust environment variables if needed
+
+```bash
+cp ./backend/.env.example ./backend/.env
+```
+
+4. Build and start the Docker containers
 
 ```bash
 docker-compose up --build
 ```
 
-4. Use
+5. Use
 
 - Simple frontend .html file is located at `./frontend/index.html`. Open it in browser.
 - Open API documentation is available at http://localhost:8000/api (Swagger UI).
