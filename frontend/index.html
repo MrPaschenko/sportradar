@@ -86,10 +86,6 @@
       <label for="guestScore">Guest Score</label>
       <input id="guestScore" name="guestScore" type="number" step="1" min="0" value="0" />
     </div>
-    <div class="wide">
-      <label for="extraJson">Extra fields JSON (optional)</label>
-      <textarea id="extraJson" name="extraJson" rows="4" placeholder='{"sport": {...}, "homeTeam": {...}, "guestTeam": {...}, "venue": {...}}'></textarea>
-    </div>
 
     <div class="row wide">
       <button type="submit" class="primary" id="saveBtn">Save</button>
@@ -226,12 +222,6 @@
     $('#status').value = ev.status ?? '';
     $('#homeScore').value = ev.homeScore ?? 0;
     $('#guestScore').value = ev.guestScore ?? 0;
-    const extras = {};
-    if (ev.sport) extras.sport = ev.sport;
-    if (ev.homeTeam) extras.homeTeam = ev.homeTeam;
-    if (ev.guestTeam) extras.guestTeam = ev.guestTeam;
-    if (ev.venue) extras.venue = ev.venue;
-    $('#extraJson').value = Object.keys(extras).length ? JSON.stringify(extras, null, 2) : '';
     window.scrollTo({ top: 0, behavior: 'smooth' });
   }
 
@@ -248,13 +238,7 @@
       guestScore: Number($('#guestScore').value || 0),
     };
     const id = $('#id').value.trim();
-    let extra = {};
-    const extraText = $('#extraJson').value.trim();
-    if (extraText) {
-      try { extra = JSON.parse(extraText); }
-      catch { throw new Error('Extra fields JSON is invalid'); }
-    }
-    return id ? { id, ...base, ...extra } : { ...base, ...extra };
+    return id ? { id, ...base } : { ...base };
   }
 
   async function saveEvent(e) {
