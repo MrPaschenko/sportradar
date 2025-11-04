@@ -96,13 +96,5 @@ To store sport events, I have identified the following entities:
 I have created an ERD that includes all the tables, their fields, and relationships. 
 ERD also follows the third normal form of database normalization.
 
-URL: https://dbdiagram.io/d/Sportradar-69037e8c6735e1117084dca3
-
-iframe code:
-
-<iframe width="560" height="315" src='https://dbdiagram.io/e/69037e8c6735e1117084dca3/690a07916735e1117030a653'> </iframe>
-
-image:
-
-![https://i.imgur.com/PXRRt88.png](https://i.imgur.com/PXRRt88.png)
+![https://dbdiagram.io/d/Sportradar-69037e8c6735e1117084dca3](https://i.imgur.com/PXRRt88.png)
 
