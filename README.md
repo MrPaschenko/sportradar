@@ -58,10 +58,10 @@ To store sport events, I have identified the following entities:
   - `id` of type `uuid`: Primary key
   - `start_time` of type `time`: Time when the event starts
   - `start_date` of type `date`: Date when the event starts
-  - `sport_id` of type `uuid`: Foreign key referencing `Sports` table
-  - `home_team_id` of type `uuid`: Foreign key referencing `Teams` table
-  - `guest_team_id` of type `uuid`: Foreign key referencing `Teams` table
-  - `venue_id` of type `uuid`: Foreign key referencing `Venues` table
+  - `_sport_id` of type `uuid`: Foreign key referencing `Sports` table
+  - `_home_team_id` of type `uuid`: Foreign key referencing `Teams` table
+  - `_guest_team_id` of type `uuid`: Foreign key referencing `Teams` table
+  - `_venue_id` of type `uuid`: Foreign key referencing `Venues` table
   - `status` of type `smallint`: Status of the event 
     - `0`: Scheduled
     - `1`: In Progress
@@ -87,7 +87,7 @@ To store sport events, I have identified the following entities:
   - `short_name` of type `text`: Short name of the team
   - `city` of type `text`: City where the team is based
   - `country` of type `text`: Country where the team is based
-  - `sport_id` of type `uuid`: Foreign key referencing `Sports` table
+  - `_sport_id` of type `uuid`: Foreign key referencing `Sports` table
   - `website_url` of type `text`: Website URL of the team
   - `logo_url` of type `text`: Logo URL of the team
 
@@ -96,4 +96,4 @@ To store sport events, I have identified the following entities:
 I have created an ERD that includes all the tables, their fields, and relationships. 
 ERD also follows the third normal form of database normalization.
 
-[<img src="https://i.imgur.com/PXRRt88.png">](https://dbdiagram.io/d/Sportradar-69037e8c6735e1117084dca3)
+[<img src="https://i.imgur.com/ClOfJSX.png">](https://dbdiagram.io/d/Sportradar-69037e8c6735e1117084dca3)
