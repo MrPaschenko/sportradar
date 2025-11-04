@@ -8,7 +8,7 @@ export const teams = pgTable('teams', {
   shortName: text('short_name').notNull(),
   city: text('city').notNull(),
   country: text('country').notNull(),
-  sportId: uuid('sport_id')
+  sportId: uuid('_sport_id')
     .notNull()
     .references(() => sports.id),
   websiteUrl: text('website_url'),

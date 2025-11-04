@@ -17,16 +17,16 @@ export const events = pgTable('events', {
     withTimezone: false,
   }).notNull(),
   startDate: date('start_date').notNull(),
-  sportId: uuid('sport_id')
+  sportId: uuid('_sport_id')
     .notNull()
     .references(() => sports.id),
-  homeTeamId: uuid('home_team_id')
+  homeTeamId: uuid('_home_team_id')
     .notNull()
     .references(() => teams.id),
-  guestTeamId: uuid('guest_team_id')
+  guestTeamId: uuid('_guest_team_id')
     .notNull()
     .references(() => teams.id),
-  venueId: uuid('venue_id')
+  venueId: uuid('_venue_id')
     .notNull()
     .references(() => venues.id),
   // 0 Scheduled, 1 InProgress, 2 Completed, 3 Canceled
