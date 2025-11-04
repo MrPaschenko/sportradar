@@ -33,7 +33,15 @@ docker-compose up --build
 - Simple frontend .html file is located at `./frontend/index.html`. Open it in browser.
 - Open API documentation is available at http://localhost:8000/api (Swagger UI).
 
-## Tech Stack
+## Tech Stack Overview
+
+I have chosen the following technologies as I have already worked with most of them during my studies in university.
+
+While I did not specifically work with NestJS and Drizzle ORM before, some of my friends recommended them to me previously, so I decided to give them a try for this project.
+
+I mostly followed official documentations of NestJS and Drizzle ORM to solve the task, but I have also used some blog posts, YouTube videos, and LLMs to help me understand certain concepts better.
+
+More about my use of LLMs can be found in the [AI_Reflection.txt](./AI_Reflection.txt) file.
 
 Backend:
 - [Node.js](https://nodejs.org/en)
